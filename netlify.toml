@@ -1,0 +1,20 @@
+# Proyecto Don Pepe — listo para Netlify
+# La carpeta `web/` ES el sitio (arrástrala tal cual a Netlify Drop).
+[build]
+  publish = "."
+  command = ""
+
+[[headers]]
+  for = "*.mp4"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+[[headers]]
+  for = "*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+[[headers]]
+  for = "*.jpeg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"

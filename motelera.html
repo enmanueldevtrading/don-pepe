@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Motelera — Proyecto Don Pepe</title>
+<meta name="description" content="Zona de la motelera: habitaciones y exteriores. Estado actual y propuestas de mejora.">
+<meta property="og:title" content="Motelera — Proyecto Don Pepe">
+<meta property="og:description" content="Zona de la motelera: habitaciones y exteriores. Estado actual y propuestas de mejora.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#0b1220; --bg2:#0e1728; --panel:#131f33; --panel2:#182742;
+  --border:#24354f; --text:#eef2f7; --muted:#8fa1b8;
+  --accent:#3fb6c8; --gold:#e3b768; --grad:linear-gradient(120deg,#3fb6c8,#5f8ee0);
+}
+html { scroll-behavior:smooth; }
+body { font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; -webkit-font-smoothing:antialiased; }
+body::before { content:''; position:fixed; inset:0; z-index:-1; background:radial-gradient(900px 400px at 80% -10%, rgba(63,182,200,.10), transparent 60%), radial-gradient(700px 380px at -10% 110%, rgba(227,183,104,.08), transparent 60%); }
+
+/* barra superior */
+.topbar { position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:1.2em; padding:.85em 1.5em; background:rgba(11,18,32,.85); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
+.topbar .marca { font-weight:800; letter-spacing:.02em; font-size:.98rem; color:var(--text); text-decoration:none; display:flex; align-items:center; gap:.5em; }
+.topbar .marca::before { content:''; width:.65em; height:.65em; border-radius:50%; background:var(--grad); box-shadow:0 0 12px rgba(63,182,200,.7); }
+.topbar .volver { color:var(--muted); text-decoration:none; font-size:.83rem; padding:.35em .8em; border:1px solid var(--border); border-radius:999px; transition:.2s; }
+.topbar .volver:hover { color:var(--text); border-color:var(--accent); }
+.topbar .zona-actual { margin-left:auto; font-size:.8rem; color:var(--gold); padding:.3em .8em; border:1px solid rgba(227,183,104,.35); border-radius:999px; }
+
+.wrap { max-width:1120px; margin:0 auto; padding:2.2em 1.5em 4.5em; }
+h1 { font-size:1.9rem; font-weight:800; letter-spacing:-.01em; margin-bottom:.3em; }
+.sub { color:var(--muted); font-size:.98rem; margin-bottom:2.2em; max-width:56ch; line-height:1.6; }
+h2 { font-size:1.02rem; font-weight:700; margin:2.6em 0 1.1em; padding-bottom:.55em; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:.6em; }
+h2::before { content:''; width:.4em; height:1.1em; border-radius:3px; background:var(--grad); }
+h2 span { color:var(--muted); font-weight:500; font-size:.82rem; margin-left:auto; background:var(--panel); border:1px solid var(--border); padding:.15em .6em; border-radius:999px; }
+
+/* hero portada */
+.hero { position:relative; margin:-2.2em -1.5em 2.4em; height:min(52vh,420px); overflow:hidden; border-bottom:1px solid var(--border); }
+.hero img { width:100%; height:100%; object-fit:cover; display:block; }
+.hero::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,18,32,.25) 0%, rgba(11,18,32,.55) 55%, var(--bg) 100%); }
+.hero .hero-txt { position:absolute; left:0; right:0; bottom:0; z-index:2; padding:0 1.5em 1.4em; max-width:1120px; margin:0 auto; }
+.hero h1 { font-size:clamp(1.8rem,5vw,2.8rem); text-shadow:0 2px 24px rgba(0,0,0,.5); }
+.hero .sub { margin:0; color:#cfd9e6; }
+
+/* tarjetas de zona */
+.carpetas { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1.3em; }
+.carpeta { display:block; text-decoration:none; color:var(--text); background:linear-gradient(180deg,var(--panel),var(--bg2)); border:1px solid var(--border); border-radius:14px; overflow:hidden; transition:transform .22s ease, border-color .22s, box-shadow .22s; box-shadow:0 6px 22px rgba(0,0,0,.35); }
+.carpeta:hover { transform:translateY(-5px); border-color:var(--accent); box-shadow:0 14px 34px rgba(0,0,0,.5), 0 0 0 1px rgba(63,182,200,.25); }
+.carpeta .mini { aspect-ratio:16/10; background:#000; overflow:hidden; }
+.carpeta .mini img { width:100%; height:100%; object-fit:cover; transition:transform .4s ease; }
+.carpeta:hover .mini img { transform:scale(1.06); }
+.carpeta .info { padding:1em 1.1em 1.15em; }
+.carpeta .info b { display:block; font-size:1rem; margin-bottom:.25em; }
+.carpeta .info small { color:var(--muted); font-size:.82rem; }
+.carpeta .info .flecha { float:right; color:var(--accent); font-weight:700; transition:transform .2s; }
+.carpeta:hover .flecha { transform:translateX(3px); }
+
+/* galería */
+.galeria { display:grid; grid-template-columns:repeat(auto-fill,minmax(265px,1fr)); gap:.9em; }
+.galeria figure { margin:0; border-radius:12px; overflow:hidden; cursor:zoom-in; background:#000; aspect-ratio:3/2; border:1px solid var(--border); }
+.galeria img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .3s ease; }
+.galeria figure:hover img { transform:scale(1.04); }
+
+/* propuestas IA */
+.ia-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(285px,1fr)); gap:1em; }
+.ia-grid figure { margin:0; border-radius:12px; overflow:hidden; cursor:zoom-in; background:#000; aspect-ratio:3/2; position:relative; border:1px solid rgba(227,183,104,.35); box-shadow:0 6px 22px rgba(0,0,0,.35); }
+.ia-grid img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .3s ease; }
+.ia-grid figure:hover img { transform:scale(1.04); }
+.ia-grid figure::before { content:'Propuesta'; position:absolute; top:.6em; left:.6em; z-index:3; font-size:.66rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#1a1206; background:var(--gold); padding:.25em .6em; border-radius:999px; }
+
+/* vídeos */
+.videos { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:1.1em; }
+.videos video { width:100%; border-radius:12px; background:#000; border:1px solid var(--border); display:block; }
+.video-box { margin:0; position:relative; }
+.video-box .btn-guardar { position:absolute; top:.6em; right:.6em; bottom:auto; }
+
+/* botón guardar */
+.btn-guardar { position:absolute; right:.6em; bottom:.6em; z-index:3; display:inline-flex; align-items:center; gap:.35em; padding:.42em .8em; font-size:.74rem; font-weight:600; color:#fff; background:rgba(11,18,32,.68); border:1px solid rgba(255,255,255,.22); border-radius:999px; text-decoration:none; backdrop-filter:blur(6px); transition:.18s; }
+.btn-guardar:hover { background:var(--accent); color:#04141a; border-color:var(--accent); }
+.btn-guardar:active { transform:scale(.94); }
+.galeria figure, .ia-grid figure, .portada-media { position:relative; }
+
+/* lightbox */
+.lightbox { display:none; position:fixed; inset:0; background:rgba(4,8,16,.96); z-index:100; align-items:center; justify-content:center; cursor:zoom-out; }
+.lightbox.on { display:flex; }
+.lightbox img { max-width:94vw; max-height:88vh; border-radius:10px; box-shadow:0 24px 80px rgba(0,0,0,.7); }
+.lightbox-bar { position:fixed; left:0; right:0; bottom:0; z-index:101; display:none; justify-content:center; padding:1.1em; padding-bottom:calc(1.1em + env(safe-area-inset-bottom)); background:linear-gradient(transparent,rgba(4,8,16,.9)); pointer-events:none; }
+.lightbox-bar.on { display:flex; }
+.lightbox-bar .btn-guardar { position:static; pointer-events:auto; font-size:.92rem; padding:.65em 1.5em; background:var(--grad); color:#04141a; border:none; font-weight:700; }
+.lightbox-bar .btn-guardar:hover { filter:brightness(1.1); }
+
+/* ---- móvil ---- */
+@media (max-width:640px){
+  .wrap { padding:1.4em 1em 3.5em; }
+  .topbar { padding:.75em 1em; }
+  h1 { font-size:1.45rem; }
+  .sub { font-size:.9rem; margin-bottom:1.5em; }
+  h2 { margin:1.8em 0 .9em; }
+  .hero { margin:-1.4em -1em 1.8em; height:38vh; }
+  .hero .hero-txt { padding:0 1em 1.1em; }
+  .carpetas { grid-template-columns:1fr; gap:1em; }
+  .galeria { grid-template-columns:repeat(2,1fr); gap:.55em; }
+  .ia-grid { grid-template-columns:repeat(2,1fr); gap:.55em; }
+  .videos { grid-template-columns:1fr; gap:1em; }
+  .galeria figure .btn-guardar, .ia-grid figure .btn-guardar { font-size:.66rem; padding:.3em .55em; }
+  .carpeta:hover, .galeria figure:hover img { transform:none; }
+  .carpeta:active, .galeria figure:active { opacity:.85; }
+  .topbar .zona-actual { display:none; }
+}
+@media (max-width:340px){
+  .galeria, .ia-grid { grid-template-columns:1fr; }
+}
+@media (hover:none){
+  .carpeta:hover { transform:none; border-color:var(--border); box-shadow:0 6px 22px rgba(0,0,0,.35); }
+  .carpeta:hover .mini img { transform:none; }
+  .galeria figure:hover img, .ia-grid figure:hover img { transform:none; }
+}
+@supports (padding:env(safe-area-inset-bottom)){
+  .wrap { padding-bottom:calc(3.5em + env(safe-area-inset-bottom)); }
+}
+@media (prefers-reduced-motion:reduce){
+  * { transition:none !important; scroll-behavior:auto !important; }
+}
+
+/* contacto / footer */
+.footer { border-top:1px solid var(--border); background:rgba(14,23,40,.7); margin-top:3em; }
+.footer .wrap { padding-top:2em; padding-bottom:2em; }
+.footer b { font-size:1rem; }
+.footer p { color:var(--muted); font-size:.9rem; margin:.5em 0; max-width:60ch; line-height:1.6; }
+.footer small { color:var(--muted); font-size:.75rem; opacity:.8; }
+.nav-zonas { display:flex; gap:.8em; margin-top:3em; }
+.nav-zonas a { flex:1; text-decoration:none; color:var(--text); background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:.9em 1em; font-size:.88rem; }
+.nav-zonas a small { display:block; color:var(--muted); font-size:.75rem; margin-bottom:.2em; }
+.nav-zonas a:hover { border-color:var(--accent); }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="marca" href="index.html">Proyecto Don Pepe</a>
+  <a class="volver" href="index.html">← Volver</a><span class="zona-actual">Motelera</span>
+</div>
+
+<div class="wrap">
+  <h1>Motelera</h1>
+  <p class="sub">Zona de la motelera: habitaciones y exteriores. Estado actual y propuestas de mejora.</p>
+  <h2>Propuestas con IA<span>3</span></h2>
+       <div class="ia-grid"><figure onclick="abrirLb(this)"><img src="images/ia/motelera/motelera-1.jpg" alt="Propuesta Motelera" loading="lazy"><a class="btn-guardar" href="images/ia/motelera/motelera-1.jpg" download onclick="event.stopPropagation()" title="Guardar propuesta">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/ia/motelera/motelera-2.jpg" alt="Propuesta Motelera" loading="lazy"><a class="btn-guardar" href="images/ia/motelera/motelera-2.jpg" download onclick="event.stopPropagation()" title="Guardar propuesta">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/ia/motelera/motelera-3.jpg" alt="Propuesta Motelera" loading="lazy"><a class="btn-guardar" href="images/ia/motelera/motelera-3.jpg" download onclick="event.stopPropagation()" title="Guardar propuesta">↓ Guardar</a></figure></div>
+  <h2>Fotos del terreno<span>27</span></h2>
+  <div class="galeria"><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111703.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111703.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111704.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111704.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111705.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111705.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111706.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111706.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111707.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111707.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111708.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111708.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111710.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111710.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111726(0).jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111726(0).jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111726.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111726.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111728.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111728.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111730.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111730.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111731.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111731.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111732.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111732.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111734.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111734.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111735(0).jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111735(0).jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111735.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111735.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111737.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111737.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111738.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111738.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111739.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111739.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111741.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111741.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111742.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111742.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111746.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111746.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111747.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111747.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111800.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111800.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111806.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111806.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111811.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111811.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure><figure onclick="abrirLb(this)"><img src="images/motelera/20261014_111823.jpg" alt="Motelera" loading="lazy"><a class="btn-guardar" href="images/motelera/20261014_111823.jpg" download onclick="event.stopPropagation()" title="Guardar foto">↓ Guardar</a></figure></div>
+  <h2>Vídeos<span>2</span></h2><div class="videos"><figure class="video-box"><video controls preload="metadata" src="videos/motelera/20261014_111700.mp4"></video><a class="btn-guardar" href="videos/motelera/20261014_111700.mp4" download onclick="event.stopPropagation()" title="Guardar vídeo">↓ Guardar</a></figure><figure class="video-box"><video controls preload="metadata" src="videos/motelera/20261014_111721.mp4"></video><a class="btn-guardar" href="videos/motelera/20261014_111721.mp4" download onclick="event.stopPropagation()" title="Guardar vídeo">↓ Guardar</a></figure></div>
+  <div class="nav-zonas"><a href="minigolf.html"><small>← Anterior</small>Minigolf</a><a href="index.html" style="text-align:right"><small>→</small>Volver a portada</a></div>
+</div>
+
+<footer class="footer"><div class="wrap"><b>Proyecto Don Pepe</b><p>Propuesta de construcción y remodelación — Frente, Piscina, Minigolf y Motelera. Fotos del terreno, vídeos y propuestas visuales.</p><small>Fotos y propuestas de carácter ilustrativo. Proyecto en fase de propuesta.</small></div></footer>
+<div class="lightbox" id="lb" onclick="cerrarLb()"><img id="lb-img" src="" alt=""></div><div class="lightbox-bar" id="lb-bar"><a class="btn-guardar" id="lb-guardar" href="#" download onclick="event.stopPropagation()">Guardar imagen</a></div>
+<script>
+function abrirLb(el){var i=el.querySelector('img');if(!i)return;document.getElementById('lb-img').src=i.src;document.getElementById('lb-img').alt=i.alt||'';var a=document.getElementById('lb-guardar');a.href=i.src;a.setAttribute('download','');document.getElementById('lb').classList.add('on');document.getElementById('lb-bar').classList.add('on');document.body.style.overflow='hidden';}
+function cerrarLb(){document.getElementById('lb').classList.remove('on');document.getElementById('lb-bar').classList.remove('on');document.body.style.overflow='';}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')cerrarLb();});
+</script>
+</body>
+</html>
